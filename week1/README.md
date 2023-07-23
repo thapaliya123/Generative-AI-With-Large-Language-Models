@@ -156,7 +156,7 @@
         - [T5](https://huggingface.co/docs/transformers/model_doc/t5)
 
 
-3. Decoder only models
+3. **Decoder only models**
     - Uses only the Decoder of original Transformer architecture.
     - These models are called `auto-regressive models.`
         - Auto-regressive models is a techniques to predict the next word in a sequence of words based on the words that have come before it.
