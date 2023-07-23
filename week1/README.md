@@ -64,6 +64,10 @@
 
  - The transformer architecture revolutionized natural language tasks, outperforming earlier RNN-based models and enabling powerful generative capabilities.
 
+ - The two main problems of RNNs solved by Transformer architecture are:
+    - Long-term dependencies
+    - Parallelize Computation 
+
  - The key feature of transformers is self-attention, which allows the model to understand the relevance and context of all words in a sentence by applying attention weights to their relationships.
 
  - The transformer consists of two parts: the encoder and the decoder, which work together and share similarities in processing.
