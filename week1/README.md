@@ -175,3 +175,51 @@
 
 
 _**At this point, I want you to encourage to take look at [Jay Alammar "The illustrated transformer"](https://jalammar.github.io/illustrated-transformer/) for interactive visualizations.**_
+
+
+## Prompting and Prompt Engineering
+- The text you fed into the model is called `prompt`.
+- The act of generating text is called `inference`.
+- The output text is know as `completion`.
+- The length of the longest sequence of tokens that a LLM can use to generate a completion token is known as context window of a LLM.
+- Prompt Engineering  is the practice of crafting effective queries or inputs referred to as prompts to guide AI to deliver the most accurate and useful answer.
+- For the good answer, we generally add examples inside the prompt that helps LLMs to generalize based on the provided examples. Hence, providing examples inside the context window or prompts is called as `incontext-learning`
+
+- Instructor talks about 3 different scenarios:
+    1. `Zero Shot Inference`
+    ```
+    > Here no example is provided in the prompt
+    Classify this review:
+    I loved this movie!
+    Sentiment:
+    ```
+
+    2. `One Shot Inference`
+    > Here one example is provided in the prompt.
+    ```
+    Classify this review:
+    I loved this movie!
+    Sentiment: Positive
+
+    Classify this review:
+    I don't like this chair.
+    Sentiment:
+    ```
+
+    3. `Few Shot Inference`
+    > Here few examples are provided in the prompt
+    ```
+    Classify this review:
+    I loved this movie!
+    Sentiment: Positive
+
+    Classify this review:
+    I don't like this chair.
+    Sentiment:  Negative
+
+    Classify this review:
+    Who would use this product?
+    Sentiment: 
+    ```
+
+**`As per the Instructor, Largest models are good at zero-shot inference with no examples, where as Smaller models can benefit from one-shot or few-shot inference. You need to go for fine-tuning if your model is not performing well even with 5 or 6 examples.`**
