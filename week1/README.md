@@ -223,3 +223,122 @@ _**At this point, I want you to encourage to take look at [Jay Alammar "The illu
     ```
 
 **`As per the Instructor, Largest models are good at zero-shot inference with no examples, where as Smaller models can benefit from one-shot or few-shot inference. You need to go for fine-tuning if your model is not performing well even with 5 or 6 examples.`**
+
+
+## Generative Configuration (Inference parameters)
+>> Here we'll see some of the configuration parameters that we can adjust to make the Large Language Models perform better. These configurations parameters are different from training parameters and contribute to make inference result better, allowing users to control various aspects of the text generation process.
+
+- **`Max new tokens`**
+    - Limits the number of tokens that the model will generate.
+    - Example:
+        - max_new_token = 100. We are asking model to generate max of 100 tokens. Here, it is not necessary that model will always generate 100 tokens, because if model generate stop token in advance before reaching 100 tokens, the generation process stops. In this case generated tokens can be less than 100.
+
+- **`Greedy Decoding`**
+    - In final layer of LLMs architecture, there is a softmax layer, which outputs the probability distribution of all the words present in the Vocabulary.
+    - Most LLMs by default will operate with greedy decoding.
+        - Simplest form of decoding where model always choose the word with highest probability.
+        - Suitable for short generations.
+        - can include repeated words in the generations.
+    - `Example:`
+        ```
+        cake: 0.20
+        donut: 0.10
+        banana: 0.02
+        apple: 0.01
+        ....  ......
+
+        In Greedy Decoding, the models output the words with highest probability scores i.e. cake in this case.
+        ```
+
+- **`Random Sampling`**
+    - Introduces variability by randomly selecting words based on their probability distribution.
+    - This allows for more natural and diverse text generation.
+    - However, it can also lead to outputs that may not make sense or wander off into unrelated topics.
+    - `Example: `
+        ```
+        cake: 0.20
+        donut: 0.10
+        banana: 0.02
+        apple: 0.01
+        ....  ......
+
+        In Random Sampling, the models output the words by sampling based on the probability scores.
+        - here, chances of occuring cake is 20%
+        - chances of occuring donut is 10%
+        - chances of occuring banana is 2%
+        - chances of occuring apple is 1% and so on.
+
+        So, in this case, model could outputs apple as well although it has less probability score.
+        ```
+         
+- **`Sample top K`** 
+    - With "Sample Top k", you specify a value k, and the model randomly samples from the top k tokens with the highest probabilities.
+    - `Example: `
+    ```
+    cake: 0.20
+    donut: 0.10
+    banana: 0.02
+    apple: 0.01
+    ....  ......
+
+    Let, K = 2
+
+    Top K words: cake(0.20), and donut(0.10)
+
+    Random Sample between cake(0.20), and donut(0.10) with,
+    
+        - 20% of chances of selecting cake
+        - 10% of chances of selecting donut 
+    ```
+
+- **`Sample top P`**
+    - With "Sample Top p", you specify a probability threshold p, and the model only considers tokens whose cumulative probability mass is less than or equal to p.
+    - select an output using the random-weighted strategy with the top-ranked consecutive results by probability and with a cumulative probability <= p.
+
+    - `Example: `
+    ```
+    cake: 0.20
+    donut: 0.10
+    banana: 0.02
+    apple: 0.01
+    ....  ......
+
+    if p = 0.30
+
+    Now, The options are words, cake (0.20) and donut (0.10) since (0.20 + 0.10 <= 0.30)
+
+    Next, The model choose next words via random sampling between cake (0.20) and donut (0.10) i.e.
+        - 20% of chances of selecting cake
+        - 10% of chances of selecting donut
+
+    ```
+
+- **`Temperature`**
+    - Range: 0 to positive inifinity.
+    - You can visit [this site](https://lukesalamone.github.io/posts/what-is-temperature/) to play with the temperature.
+    - The softmax function with temperature (θ) is defined as:  
+
+    - $$
+       \sigma(z_i) = \frac{e^{z_i / \theta}}{\sum_{j=1}^{N} e^{z_j / \theta}}
+      $$
+
+        - where,  
+            - $\sigma(z_i)$ represents the logits for the i-th element in the input vector z.
+            - N, is the total number of elements in the input vector z
+
+    - `High Temperature (e.g. T > 1.0)`
+        - Makes output more random and diverse.
+        
+    - `Medium Temperature (e.g. T close to 1.0)`
+        - Balances randomness and determinism.
+
+    - `Low Tempearture (e.g. T < 1.0)`
+        - output more focused and deterministic.
+
+    - `Cooler Temperature vs Higher Temperature`
+        - <img src='images/12.png' width='400'>
+        - When Temperature is low, we can see less variability distribution with single peak at word **cake** i.e. less randomness
+        - When Temperature is high, we can see more variable distribution i.e. Broader, flatter probability distribution meaning more randomness.
+
+_**`Higher the temperature, Higher the randomness. Lower the temperature, Lower the randomness.`**_
+
