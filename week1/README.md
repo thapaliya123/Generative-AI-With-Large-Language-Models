@@ -342,3 +342,59 @@ _**At this point, I want you to encourage to take look at [Jay Alammar "The illu
 
 _**`Higher the temperature, Higher the randomness. Lower the temperature, Lower the randomness.`**_
 
+
+## Generative AI project lifecycle
+> In this section Instructor highlights the overall Generative AI project lifecycle starting from Project Scoping to Project Integration.
+
+<img src='images/13.png' width='500'>
+
+- **Scope(Define the use cases)**
+    - LLMs can do a variety of tasks.
+    - LLMs abilities depends on the size and architecture of the model. 
+    - Big models are good at performing variety of tasks as they have seen more data and trained on big architecture with large compute resources. However small models are good at performing small or subset of tasks.
+    - You need to decide what LLMs can be used in your applications use cases
+        - Choose Large models to Perform many tasks i.e Essay Writing, Summarization, Translation, Information retrieval (NER), Invoke APIs and actions.
+        - Choose Small models to perform single tasks i.e. Information retrieval (NER).   
+    
+
+- **Select LLM**
+    - LLM can be used as: 
+        - `Inference` via existing model
+        - `FineTune` an existing model
+        - `Pretrain` your own
+
+    - In general you can start via model inference and test it via prompting, then you can move towards the steps of FineTuning on custom data, or even Pretraining your own LLMs from scratch.
+
+    - Choice of LLMs depends on 
+        - The variety of task you wish to perform. 
+        - Available compute resources you have.
+        - Licence (commercial, research, non-comercial)
+        - [LLM LeaderBoard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard)
+
+
+
+- **Adapt and align model**
+    - Once you have choosed your model, Next step is to assess its performance and carry out additional training if needed for your application.
+    - Instructor suggests to start from Prompt engineering via in-context learning, switch to Finetuning if in-context learning doesn't works, finally you can shift towards additional fine-tuning technique called reinforcement learning with human feedback.
+    - In order to evaluate the models (How well your model is performing?) you can rely on different metrics based on the specific tasks (Example: ROUGE score for summarization.)
+
+ _**`Adapting and Evaluating process is Highly Iterative i.e. Start with sample prompt evaluate the result. Based on the evaluation result go back to prompt-tuning or even fine-tuning and again evaluate the model unless you reach to certain evaluation threshold.`**_
+
+ - **Application Integration**
+    - Two ways:
+        1. Optimize and deploy model for inference
+            - Directly host or deploy your model into your infrastructure for inference.
+            - Here, you need to optimize your model via techniques such as quantization, so that you can make best use of your compute resources with best user experiences. 
+
+        2. Augment model and build LLM-powered applications
+
+
+## Introduction to AWS labs
+> This course encourages hands-on learning via several lab exercises to solidify concepts. In first week you will do the `dialogue summarization task` using generative AI.  You will explore how the input text affects the output of the model, and perform prompt engineering to direct it towards the task you need.
+
+- The lab environment called `Vocareum` provides access to Amazon SageMaker through an AWS account at no cost to the learners.
+    - [Vocareum](https://www.vocareum.com/) is an online platform that provides cloud-based learning environments students and learners. It is commonly used in educational settings like online courses and workshops, to provide hands-on learning experiences without the need for learners to set up their own local environments. 
+- Learners can access the labs in Vocareum, launch the AWS console, and open SageMaker Studio, a jupyter-based IDE for running notebooks.
+- Learners are guided step-by-step on how to access the labs, open the terminal, and copy the necessary code from a public S3 bucket.
+
+_**`Note: If you are auditing the course, then you will not be able to access the lab environments.`**_
