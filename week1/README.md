@@ -228,6 +228,8 @@ _**At this point, I want you to encourage to take look at [Jay Alammar "The illu
 ## Generative Configuration (Inference parameters)
 >> Here we'll see some of the configuration parameters that we can adjust to make the Large Language Models perform better. These configurations parameters are different from training parameters and contribute to make inference result better, allowing users to control various aspects of the text generation process.
 
+_**A full list for available Generative Configuration parameters can be found [here](https://huggingface.co/docs/transformers/v4.29.1/en/main_classes/text_generation#transformers.GenerationConfig)**_
+
 - **`Max new tokens`**
     - Limits the number of tokens that the model will generate.
     - Example:
@@ -394,7 +396,33 @@ _**`Higher the temperature, Higher the randomness. Lower the temperature, Lower 
 
 - The lab environment called `Vocareum` provides access to Amazon SageMaker through an AWS account at no cost to the learners.
     - [Vocareum](https://www.vocareum.com/) is an online platform that provides cloud-based learning environments students and learners. It is commonly used in educational settings like online courses and workshops, to provide hands-on learning experiences without the need for learners to set up their own local environments. 
+
 - Learners can access the labs in Vocareum, launch the AWS console, and open SageMaker Studio, a jupyter-based IDE for running notebooks.
+
 - Learners are guided step-by-step on how to access the labs, open the terminal, and copy the necessary code from a public S3 bucket.
 
+- Learners are asked to perform Dailogue Summarization via FLAN-T5 LLM from Hugging Face. 
+    1. Dialogue Summarization without prompt engineering.
+    2. Dialogue Summarization with prompt engineering.
+
+- LLM: [FLAN-T5](https://huggingface.co/docs/transformers/model_doc/flan-t5)
+- Tokenizer: [Tokenizer parameter details](https://huggingface.co/docs/transformers/v4.28.1/en/model_doc/auto#transformers.AutoTokenizer)
+- Dataset: [knkarthick/dialogsum](https://huggingface.co/datasets/knkarthick/dialogsum)
+
+- 
+
 _**`Note: If you are auditing the course, then you will not be able to access the lab environments.`**_
+
+
+```python
+print("hello")
+
+```
+
+## References
+- https://huggingface.co/blog/few-shot-learning-gpt-neo-and-inference-api
+- https://github.com/google-research/FLAN/tree/main/flan/v2
+- https://huggingface.co/docs/transformers/model_doc/flan-t5
+- https://huggingface.co/docs/transformers/v4.28.1/en/model_doc/auto#transformers.AutoTokenizer
+- https://www.vocareum.com/
+- https://huggingface.co/docs/transformers/v4.29.1/en/main_classes/text_generation#transformers.GenerationConfig
