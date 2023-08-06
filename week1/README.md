@@ -409,15 +409,53 @@ _**`Higher the temperature, Higher the randomness. Lower the temperature, Lower 
 - Tokenizer: [Tokenizer parameter details](https://huggingface.co/docs/transformers/v4.28.1/en/model_doc/auto#transformers.AutoTokenizer)
 - Dataset: [knkarthick/dialogsum](https://huggingface.co/datasets/knkarthick/dialogsum)
 
-- 
 
 _**`Note: If you are auditing the course, then you will not be able to access the lab environments.`**_
 
 
+## Lab Assignments
 ```python
 print("hello")
 
 ```
+
+
+## LLM Pre-training Large Language Models
+> Here, Instructor highlights about different LLMs model architecture along with their pretraining objectives.
+
+- Once you define your project scope, Next step is to select the Large Language Model, For this you may have 2 options i.e. to work with existing foundation model via prompting or train your own from scratch.
+- It is recommended to start with foundation model and the move towards the training part.
+- AI community named `Hugging Face` offers numerous [open source models](https://huggingface.co/models) with model cards, containing vital information about the best use cases, training details, and known limitation of each model. 
+
+<img src='images/14.png' width='400'>
+
+- As per the instructor, The initial training process for LLMs is referred to as pre-training. 
+- In a pre-training phase, models learns from vast amounts (gigabytes, terabytes, petabytes) of unstructured textual data.
+- This vast amount of data is ofter created from many sources such as scraping off the internet and corpora of texts that have been collected specifically for training large language models.
+- This pre-training steps doesn't require a labelled data, since the training process is carried out in a `self-supervised` manner i.e. predicting next token based on the previous token.
+- Pretraining helps the model with a deep statistical representation of language, enabling it to understand and capture complex patterns and structures present in the text.
+- Pretraining requires large amount of computational power i.e. GPUs.
+- You need to ensure quality of scrapped data before feeding it to the model during training i.e. address bias, and remove other harmful content.
+
+- **Comparative Study of Different Model Architecture**
+
+| **Model Type**       | **Pre-training Objective**                | **Context Handling**           | **Use Cases**                                          | **Examples**                                          |
+|---------------------|----------------------------------------|-----------------------------|-------------------------------------------------------|------------------------------------------------------|
+| Autoencoding Models | Masked Language Modeling               | Bi-directional               | Sentence Classification, Named Entity Recognition, Word Classification | BERT, RoBERTa                                          |
+| Autoregressive Models | Causal Language Modeling               | Uni-directional             | Text Generation, Zero-shot Inference                    | GPT, GPT-2, GPT-3                                      |
+| Sequence-to-Sequence Models | Span Corruption and Reconstruction    | Bi-directional (Encoder)    | Translation, Summarization, Question-Answering         | T5 (Text-to-Text Transfer Transformer), BART         |
+
+- `Pre-training Objective`: 
+    - Highlights primary training objective for each model during the pre-training phase.
+- `Context Handling:`
+    - Autoencoding models capture bi-directional context, allowing them to understand the full context of a token. Given a word at position <t> it considers all the past words and future words in a sequence.
+    - In contrast, [autoregressive models](https://en.wikipedia.org/wiki/Autoregressive_model) have uni-directional context i.e. words from the past, since it is predicting future words.
+    - Sequence to Sequence models use both encode and decoder part, giving them bidirectional context during training.
+
+- <img src='images/15.png' width='500'>
+    
+_**`As per the researcher, Larger the model size the wide range of task it can performed with no or less in-context learning.`**_
+
 
 ## References
 - https://huggingface.co/blog/few-shot-learning-gpt-neo-and-inference-api
