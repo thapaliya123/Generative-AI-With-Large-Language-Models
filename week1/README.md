@@ -457,6 +457,47 @@ print("hello")
 _**`As per the researcher, Larger the model size the wide range of task it can performed with no or less in-context learning.`**_
 
 
+## Computational Challenges of training LLMs
+- One of the major issues when you try to train LLMs is `OutOfMemoryError: CUDA out of memory`.
+- This error may occurs when trying to train your models or just loading your models on Nvidia GPUs.
+- CUDA stands for Compute Unified Device Architecture. It is collection of libraries and tools developed for Nvidias GPU.
+- Libraries such as PyTorch and Tensorflow use CUDA to boost performance on matrix multiplication and other operations common to deep learning.
+- Out of Memory issues arises because of huge size of LLMs and require tons of memory to store and train all of their parameters.
+- **Calculation of Approximate GPU RAM needed to store 1B parameters**
+
+```
+- 1 parameter = 4 bytes (32-bit float) --> way computer used to represent real numbers  
+
+- 1B parameters = 4 * 10**9 bytes = 4GB (GPU RAM)
+
+```
+
+- **Calculation of Approximate GPU RAM needed to train LLMs**
+```
+Model Parameters (Weights) -->  4 bytes per parameters
+
+Adam Optimizers (2 states)  --> +8 bytes per parameters
+
+Gradients                   --> +4 bytes per parameters
+
+Activations and             --> +8 bytes per parameters (high-end estimates)
+temp memory (variable size)
+
+TOTAL                ---------> = 4 bytes per parameter + 20 extra bytes per parameters (APPROX 80GB)
+```
+
+_**`80GB is the memory capacity of a single Nvidia 100 GPU, popular for machine leraning tasks in the cloud.`**`_
+
+
+- **Quantization:**
+    - It is the technique used to reduce the memory.
+    - `IDEA:` _Reduce the memory required to store the weights of your model by reducing their precision from 32-bit floating point numbers to 16-bit floating point numbers or 8-bit integer numbers_
+    - `Data Format`
+        - FP32: full precision 32 bit
+        - FP16: full precision 16 bit
+    - This technique reduces model accuracy slightly but it is acceptable since it reduces the model size tremendously  with minimal performance loss.
+
+    - <img src='images/16.png' width='450'>
 ## References
 - https://huggingface.co/blog/few-shot-learning-gpt-neo-and-inference-api
 - https://github.com/google-research/FLAN/tree/main/flan/v2
