@@ -492,12 +492,96 @@ _**`80GB is the memory capacity of a single Nvidia 100 GPU, popular for machine 
 - **Quantization:**
     - It is the technique used to reduce the memory.
     - `IDEA:` _Reduce the memory required to store the weights of your model by reducing their precision from 32-bit floating point numbers to 16-bit floating point numbers or 8-bit integer numbers_
-    - `Data Format`
-        - FP32: full precision 32 bit
-        - FP16: full precision 16 bit
     - This technique reduces model accuracy slightly but it is acceptable since it reduces the model size tremendously  with minimal performance loss.
 
-    - <img src='images/16.png' width='450'>
+    - `FP32 and FP16`
+        - FP32: full precision 32 bit. By default computer system use this to represent numbers.
+        - FP16: full precision 16 bit
+        
+
+        - <img src='images/16.png' width='450'>
+
+    - `BFLOAT16`
+        - stands for Brain Floating Point Format.
+        - Developed by Google Brain.
+        - Captures the dynamic range of FP32 using only 16 bits.
+        - It maintains the full exponent range of FP32 but truncates the fraction to save memory.
+        - Improves training stability and can enhance model performance, especially on newer GPUs like NVIDIA's A100.
+        - It strikes a balance between FP16 and FP32, offering memory savings while still retaining good performance.
+        - `Cons: ` Not suited for Integer Calculations (which is rare in deep learning).
+        - <img src='images/17.png' width='450'>
+
+    - `INT8`
+        - Quantization of 32 bit floating point to 8 bit integer.
+        - This quantization type represents model parameters using 8-bit integer numbers.
+        - Since Integers have a smaller range compared to floating point numbers, INT8 quantization can result in significant memory savings.
+            ```
+            Example: Represent 3.141592 using INT8
+
+            1. Convert 3.141592 to an integer i.e. 3 (truncate the decimal part)
+            2. Represent 3 as an 8-bit integer:
+                - In binary: 00000011 (3 in binary)
+
+            So, in 8-bit representation, the value closest to 3.141592 is 00000011.
+
+            - This leads to significant data loss, however results in memory savings.
+            ```
+- **Comparitive Study**
+
+    | Quantization Type | Bits | Exponent Bits | Fraction Bits | Memory (Bytes) |
+    |-------------------|------|---------------|---------------|----------------|
+    | FP32              | 32   | 8             | 23            | 4              |
+    | FP16 (Half)       | 16   | 5             | 10            | 2              |
+    | BFLOAT16          | 16   | 8             | 7             | 2              |
+    | INT8              | 8    | -             | 7             | 1              |
+
+
+- **[Quantization] Approximate GPU RAM needed to store 1B parameters**
+```
+Given same Model size (1B parameters),
+
+1. Full Precision Model: 4GB @ 32-bit full precision
+
+2. 16-bit quantized Model: 2GB @ 16-bit half precision
+
+3. 8-bit quantized Model: 1GB @ 8-bit precision
+```
+
+- **[Quantization] Approximate GPU RAM needed to train 1B parameters**
+
+```
+Given Same model size (1B parameters),
+
+1. 80GB @ 32-bit full precision
+
+2. 40GB @ 16-bit half precision
+
+3. 20GB @ 8-bit precision
+
+Note: 80GB is the maximum memory for the Nvidia A100 GPU, so to keep the model on a single GPU, you need to use 16-bit or 8-bit quantization.
+```
+-  **[No Quantization] Approximate GPU RAM needed to train Larger Models**
+
+```
+- 1B param model: 4G @ 32-bit precision
+
+- 175B param model: 14,000GB @ 32-bit full precision
+
+- 500B param model: 40,000GB @ 32-bit full precision
+
+
+Note: Increase in model sizes, increases GPU RAM needed for training. So, from single GPU you need to shift towards distributed training using 100s of GPUs.
+```
+- **summary**
+    - Quantization technique reduces required memory to store and train models.
+    - Quantization projects original 32-bit floating point numbers into lower precision spaces like FP16, INT8.
+    - Modern Deep Learning Framework supports `Quantization-aware training (QAT)` which learns the quantization scaling factors during training process.
+    - BFloat16 is popular choice in deep learning due to its ability to maintain dynamic range of FP32 but reduces the memory footprint by half.
+    - Many LLMs like `FLAN T5` have been pre-trained with BFLOAT16
+
+
+## Efficient Multi-GPU Compute Strategies
+
 ## References
 - https://huggingface.co/blog/few-shot-learning-gpt-neo-and-inference-api
 - https://github.com/google-research/FLAN/tree/main/flan/v2
