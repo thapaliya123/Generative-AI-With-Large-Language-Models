@@ -581,6 +581,53 @@ Note: Increase in model sizes, increases GPU RAM needed for training. So, from s
 
 
 ## Efficient Multi-GPU Compute Strategies
+> This section covers the general idea process of scaling model training efforts beyond single GPU.The focus is on efficiently distributing computation across multiple GPUs, even for small models, and addressing the challenges of memory constraints when dealing with larger models.
+
+- May need to scale your model training efforts beyond single GPU.
+- It is recommended to fit your model to multiple GPUs to speed up the training even if  its fit on a single GPUs.
+- **Case: When model fits on a single GPU**
+    - Distribute large datasets across multiple GPUs and process these batches of data in parallel.
+    - A popular implementation of these model replication technique is Pytorch Distributed Data Parallel.
+    - Distributed Data Parallel (DDP) copies model in each GPUs and send batches of data in each of the GPUs in parallel.
+    - Each data is processed parallely, syncronization step combines the results of each GPU.
+    - <img src='images/18.png' width='500'>
+    - `Limitation:`
+        - Need to keep full model copy and training parameters on each GPU.
+
+- **Case2: When model doesn't fit into a single GPU**
+    - You can use technique called `Model Sharding`
+    - Sharding is a technique used to distribute and split data or components across multiple devices or nodes for efficient processing.
+    - Popular implementation of model sharding is Pytorch `Fully Sharded Data Parallel (FSDP)`
+    - FSDP is motivated by the `ZERO --> Zero data overlap between GPUs`.
+    - Goal of Zero is to optimize memory by distributing or sharding model parameters, gradients, and optimizer states across GPUs with ZeRO data overlap.
+    - Suitable when model doesn't fit onto a single GPU.
+    - `ZeRO`
+        >> Optimize memory by distributing (sharding) the model parameters, gradients, and optimizer states across GPUs.
+        1. `Stage 1:`
+            - shards or distributes only optimizer states, reducing memory by upto 4x.
+
+        2. `Stage 2:`
+            - shards optimizer plus gradients accross GPUs, reducing memory by up to 8x when combined with Stage 1.
+
+        3. `Stage 3:`
+            - Shards all components (optimizers + gradients + parameters) across GPUs.
+            - Memory reduction is linear with a number of GPUs.
+
+    - Unlike DDP, In FSDP, you distribute data accross multiple GPUs along the with the model parameters, gradients, optimizer states. This is achieved using strategies specified in [Zero](https://paperswithcode.com/method/zero)
+    - <img src='images/20.png' width='450'>
+
+    - **Notes:**
+        - Helps to reduce overall GPU memory utilization.
+        - Configure level of sharding via `sharding factor`  
+            1. Full Replication (no sharding)
+                - sharding_factor = 1 GPU
+            2. Full Sharding
+                - sharding_factor = max number of  available GPUs
+                - Most memory savings but increase communication overhead required for synchronization between different GPUs.
+            3. Hybrid Sharding
+                - sharding_factor = in between 1 GPU and available GPUs.
+                
+
 
 ## References
 - https://huggingface.co/blog/few-shot-learning-gpt-neo-and-inference-api
