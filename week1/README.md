@@ -626,7 +626,9 @@ Note: Increase in model sizes, increases GPU RAM needed for training. So, from s
                 - Most memory savings but increase communication overhead required for synchronization between different GPUs.
             3. Hybrid Sharding
                 - sharding_factor = in between 1 GPU and available GPUs.
-                
+
+
+## Scaling laws and compute-optimal models
 
 
 ## References
