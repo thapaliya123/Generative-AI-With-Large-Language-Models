@@ -630,6 +630,34 @@ Note: Increase in model sizes, increases GPU RAM needed for training. So, from s
 
 ## Scaling laws and compute-optimal models
 
+- Pretraining Goals: maximize model performance i.e. minimizing loss when predicting tokens.
+
+- Two choices to achieve pretraining goals:
+    - Increase Dataset size
+    - Increase number of parameters in the model
+
+- In performing above tasks, we have constraint on compute budget (i.e. GPUs, training time)
+
+- **Compute Budget for training LLMs**
+    - petaflop/s-day:
+        - number of floating point performed at rate of 1 petaFLOP per second for one day
+        - 1petaFLOP/s = 1,000,000,000,000,000 (one quadrillion) floating point operations per second.
+        - Floating point operations (FLOPs) are fundamental arithmetic operations (like addition, subtraction, multiplication, division) performed on floating-point numbers in a computer.
+        - 1 petaflop/s for day is equivalent 8 NVIDIA V100 GPUs operating at full efficiency for one full day.
+        - Also, 2 Nvidia A100 GPUs are equivalent to 8 Nvidia V100 GPUs (since A100 have a more powerful processor that can carry out more operations at once).
+        - `petaflop/s per day:` per second day adds the element of time. It means that the petaFLOP value is being sustained over the course of a full day (24 hours)
+    - `Number of petaflop/s-days to pretrain varous LLMs`
+        - <img src='images/21.png' width='400'>
+        - Above chart shows a comparison of the peta flops per second days required to pre-train different variant of BERT and ROBERTA (encoder only), T5 (encoder-decoder), and GPT-3 (decoder only).
+        - Here,
+            - T5 XL with 3B parameters required close to 100 petaFLOP per second days.
+            - Large GPT-3 175B parameters model required approx 3,700 petaFLOP per second days.
+    - In the paper "ChinChilla paper" published in 2022 a group of researchers carried out a detailed study of the performance of large language models of various sizes and quantities of training data. The goal was to find the optimal number of parameters and volume of training data for a given customer budget.
+    - Chinchilla paper, hints that many of the 100 billion parameter LLMs like GPT-3 may actually be over parametrized (meaning they have more paameters than they need)
+    
+
+
+
 
 ## References
 - https://huggingface.co/blog/few-shot-learning-gpt-neo-and-inference-api
