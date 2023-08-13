@@ -639,7 +639,7 @@ Note: Increase in model sizes, increases GPU RAM needed for training. So, from s
 - In performing above tasks, we have constraint on compute budget (i.e. GPUs, training time)
 
 - **Compute Budget for training LLMs**
-    - petaflop/s-day:
+    - `petaflop/s-day:`
         - number of floating point performed at rate of 1 petaFLOP per second for one day
         - 1petaFLOP/s = 1,000,000,000,000,000 (one quadrillion) floating point operations per second.
         - Floating point operations (FLOPs) are fundamental arithmetic operations (like addition, subtraction, multiplication, division) performed on floating-point numbers in a computer.
@@ -652,9 +652,51 @@ Note: Increase in model sizes, increases GPU RAM needed for training. So, from s
         - Here,
             - T5 XL with 3B parameters required close to 100 petaFLOP per second days.
             - Large GPT-3 175B parameters model required approx 3,700 petaFLOP per second days.
-    - In the paper "ChinChilla paper" published in 2022 a group of researchers carried out a detailed study of the performance of large language models of various sizes and quantities of training data. The goal was to find the optimal number of parameters and volume of training data for a given customer budget.
-    - Chinchilla paper, hints that many of the 100 billion parameter LLMs like GPT-3 may actually be over parametrized (meaning they have more paameters than they need)
-    
+
+    - `ChinChilla Paper`
+        - In the paper [ChinChilla paper](https://arxiv.org/abs/2203.15556) published in 2022 a group of researchers carried out a detailed study of the performance of large language models of various sizes and quantities of training data. The goal was to find the optimal number of parameters and volume of training data for a given customer budget.
+        - Chinchilla paper, hints that many of the 100 billion parameter LLMs like GPT-3 may actually be over parametrized (meaning they have more parameters than they need to achieve good understanding of language) and under-trained.
+        - Chinchilla authors hypothesized that smaller models may be able to achieve the same performance as much large ones if they are trained on larger datasets.
+        - `Compute-Optimal vs Non Compute-Optimal Model Comparison`
+            - A compute optimal model is one that is designed and trained to achieve the best possible performance considering the available computational resources, such as GPU or other hardware, within a given compute budget.
+            - A non compute-optimal model might not be designed or trained with careful consideration of the available computational resources i.e. it could be larger or more complex than necessary given the compute budget. 
+            - <img src='images/22.png' width='450'>
+            - Instructor highlights key takeways from Chinchilla paper i.e. 
+                - _**`The optimal training dataset size for a given model is about 20 times larger than the number of parameters in the model.`**_
+                - _**`Llama was trained on dataset that is nearly close to chichilla recommended number i.e. 20 times larger than number of parameters.`**_
+                - _**`Compute optimal chichilla model outperforms non-compute models such as GPT-3 on a large range of downstream tasks.`**_
+            - This means, for a 70B parameter model, the ideal training dataset contains 1.4 trillion tokens or 20 times the number of parameters.
+            - From the above table, we can see last 3 models were trained on datasets that were smaller than the chinchilla optimal size (These larger models may be under-trained due to lower training size). 
+                - You can see compute-optimal # of tokens columns to see recommended numbers of training data size.
+    - `Future Trends in Model Development considering Chinchilla paper findings`
+        - Researchers and developers are shifting towards optimizing model design rather than just increasing model size.
+        - <img src='images/23.png' width='450'>
+        - As seen BloombergGPT with model size 50B was trained following exactly the recommendation from Chinchilla paper.
+
+
+
+## Additional Readings:
+>> Includes additional resources suggested by instructor.
+
+1. **Transformer Architecture:**
+    - [Attention is all you need](https://arxiv.org/pdf/1706.03762)
+    - [BLOOM: BigScience 176B Model](https://arxiv.org/abs/2211.05100)
+    - [Vector Space Models](https://www.coursera.org/learn/classification-vector-spaces-in-nlp/home/week/3)
+
+
+2. **Pre-training and Scaling Laws:**
+    - [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361)
+
+3. **Model architectures and pre-training objectives:**
+    - [What Language Model Archiectures and Pretraining Objective Work Best for Zero-Shot Generalization?](https://arxiv.org/pdf/2204.05832.pdf)
+    - [HuggingFace Tasks](https://huggingface.co/tasks)
+    - [HuggingFace Model Hub](https://huggingface.co/models)
+    - [LLaMA: Open and Efficient Foundation Language Models](https://arxiv.org/pdf/2302.13971.pdf) 
+ 
+4. **Scaling laws and compute-optimal models**
+    - [Language Models are Few-Shot Learners](https://arxiv.org/pdf/2005.14165.pdf)
+    - [Training Compute-Optimal Large Language Models](https://arxiv.org/pdf/2203.15556.pdf)
+    - [BloombergGPT: A Large Language Model for Finance](https://arxiv.org/pdf/2303.17564.pdf)
 
 
 
