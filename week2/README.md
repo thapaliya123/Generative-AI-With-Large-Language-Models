@@ -39,3 +39,22 @@
 - Fine-Tuning original base model leads to newer version of model known as `instruct model`
 
 - <img src='images/1.png' width='500'>
+
+
+## Fine-tuning on a single task
+- Fine-tuning on a single task is useful when there may arise situation when you to perform a single task like summarization, question answering, etc i.e. only the interested tasks.
+- Generally, 500 to 1000 training examples can results into somewhat good model, However larger training samples leads to the optimal results.
+
+- Author mentioned about the term `Catastrophic forgetting` which means the full-fine tuning process modifies the weights of the original llm. 
+    - Leads to great performance on Fine Tuned Task (single task)
+    - Degrades performance on other task (multiple task)
+
+- For better generalization capability of model on multiple task, you can fine-tune on multiple tasks at the same time.
+    - Good, multi-task fine-tuning may require 50,000 to 1,00,000 accross many tasks.
+    - i.e. more data and more computation power to train
+
+- Author also discussed about `PEFT (Parameter Efficient Fine-tuning)` instead of Full-Fine Tuning
+    - PEFT preserves the original weight of the LLMs and train only a small number of task-specific adapter layers and parameters
+    - Greater robust to catastrophic forgetting since most of the pre-trained weights are left unchanged.
+
+
