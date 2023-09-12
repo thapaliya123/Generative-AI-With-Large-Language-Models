@@ -58,3 +58,25 @@
     - Greater robust to catastrophic forgetting since most of the pre-trained weights are left unchanged.
 
 
+
+## Multi-task instruction fine-tuning
+> Extension of single task fune-tuning where training examples consisits example inputs and outputs for multiple tasks
+
+- Dataset can consists of variety of tasks such as `summarization`, `Translation`, `NER`, etc.
+
+- Generally the model is fine-tuned on these types of mixed datasets in order to improve the performance of the model on all of the mentioned tasks.
+
+- **Cons:**
+    - It requires a lot of data for fine-tuning, you may need around 50000 to 100000 or even greater.
+
+- `FLAN` family of models are trained using mult-task instruction fine-tuning  dataset.
+    - FLAN models refer to a specific set of instructions used to perform instruction fine-tuning.
+    - FLAN stands for Fine-Tuned Language Net
+    - Example: 
+        - FLAN-T5 is T5 version fine-tuned on FLAN instruction set.
+        - FLAN-PALN is the FLAN instruct version of the palm foundational model.
+
+- As Discussed, FLAN-T5 is the Fine-tuned version base T5 which is fine-tuned accross 473 datasets accross 146 task categories.
+- <img src='images/2.png' width='500'>
+
+- 
