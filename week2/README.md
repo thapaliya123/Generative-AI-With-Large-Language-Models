@@ -67,16 +67,36 @@
 - Generally the model is fine-tuned on these types of mixed datasets in order to improve the performance of the model on all of the mentioned tasks.
 
 - **Cons:**
-    - It requires a lot of data for fine-tuning, you may need around 50000 to 100000 or even greater.
+    - It requires a lot of data for fine-tuning, you may need around 50000 to 100000 or even greater. (As per instructor it is worth of gathering such large data, since final fine-tuned model will be of good performance)
 
 - `FLAN` family of models are trained using mult-task instruction fine-tuning  dataset.
     - FLAN models refer to a specific set of instructions used to perform instruction fine-tuning.
-    - FLAN stands for Fine-Tuned Language Net
+    - FLAN stands for `Fine-Tuned Language Net`
     - Example: 
         - FLAN-T5 is T5 version fine-tuned on FLAN instruction set.
         - FLAN-PALN is the FLAN instruct version of the palm foundational model.
 
-- As Discussed, FLAN-T5 is the Fine-tuned version base T5 which is fine-tuned accross 473 datasets accross 146 task categories.
+- As Discussed, FLAN-T5 is the Fine-tuned version of base T5 which is fine-tuned accross 473 datasets accross 146 task categories.
 - <img src='images/2.png' width='500'>
 
-- 
+- Instructor highlighted `samsum` datasets that is used to train model to improve dialogue summarization capability. You can look below for example datset:
+
+
+| Dialogue (string)                            | Summary (string)                                    |
+|----------------------------------------------|------------------------------------------------------|
+| "Amanda: I baked cookies. Do you want some ? Jerry: Sure! Amanda: I'll bring you some tomorrow :-)" | "Amanda baked cookies and will bring Jerry some tomorrow." |
+
+- **Samsum Data Link:** [Click Here](https://huggingface.co/datasets/samsum)
+
+- Samsum is also the part of FLAN instruction set.
+
+- `Sample FLAN-T5 prompt templates`
+    - <img src='images/3.png' width='500>
+    - As we can see, instruction to ask LLM to summarize are slightly different in different simples, this helps LLM to generalize better.
+
+- To further improve T5's summarization capabilities it can be further fine-tuned with a domain specific instruction dataset like [dialogsum dataset](https://huggingface.co/datasets/knkarthick/dialogsum/viewer/default/train?row=0)
+
+
+- Instructor mentioned, Summary before fine-tuning FLAN-T5 with our dataset is not that good as compared to fine-tuning FLAN-T5 with dialogsum datset that matches summarization similarly to that of human generated.
+
+_`How to evaluate how well our model performed?`_
