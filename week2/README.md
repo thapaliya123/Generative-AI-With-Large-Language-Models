@@ -100,3 +100,6 @@
 - Instructor mentioned, Summary before fine-tuning FLAN-T5 with our dataset is not that good as compared to fine-tuning FLAN-T5 with dialogsum datset that matches summarization similarly to that of human generated.
 
 _`How to evaluate how well our model performed?`_
+
+
+## Model Evaluation
