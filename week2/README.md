@@ -79,6 +79,10 @@
 - As Discussed, FLAN-T5 is the Fine-tuned version of base T5 which is fine-tuned accross 473 datasets accross 146 task categories.
 - <img src='images/2.png' width='500'>
 
+    - `Datasets:` It is an original data source   
+    - `Categories:` a single datasets can include   multiple task categoriesm  
+    - `Task:` it's a unique <datset, task_category> pair.
+
 - Instructor highlighted `samsum` datasets that is used to train model to improve dialogue summarization capability. You can look below for example datset:
 
 
@@ -91,15 +95,158 @@
 - Samsum is also the part of FLAN instruction set.
 
 - `Sample FLAN-T5 prompt templates`
-    - <img src='images/3.png' width='500>
+    - <img src='images/3.png' width='500'>
     - As we can see, instruction to ask LLM to summarize are slightly different in different simples, this helps LLM to generalize better.
 
 - To further improve T5's summarization capabilities it can be further fine-tuned with a domain specific instruction dataset like [dialogsum dataset](https://huggingface.co/datasets/knkarthick/dialogsum/viewer/default/train?row=0)
 
 
-- Instructor mentioned, Summary before fine-tuning FLAN-T5 with our dataset is not that good as compared to fine-tuning FLAN-T5 with dialogsum datset that matches summarization similarly to that of human generated.
+- Instructor mentioned, Summary before fine-tuning FLAN-T5 with our dataset is not that good as compared to fine-tuning FLAN-T5 with dialogsum dataset that matches summarization similarly to that of human generated.
 
 _`How to evaluate how well our model performed?`_
 
 
 ## Model Evaluation
+
+- **Traditional Machine Learning** 
+    - In supervised setting, there are several evaluation metrics i.e.
+        - `Accuracy`
+            - $Accuracy=\frac{Correct Predictions}{TotalSamples}$
+
+- **Large Language Models**
+    - Unlike traditional machine learning, Evaluation of LLM might be challenging since Output is textual data and non-deterministic.
+    - Instructor highlights the following examples:
+    
+        ```
+        1. "Mike really loves drinking tea" is equivalent to "Mike adores sipping tea."  
+
+
+        2. "Mike does not drink coffee" is not equivalent to "Mike does drink coffee"
+        ```
+    - With this example, we can see that even change in a single word would completely changes the meaning of text. Also there are many similar words to particular word, for example `loves` is equivalent to `adores`. This lead to several challenges in evaluating text based models or Large Languge Models.
+
+    - There are two popular metrics named `ROUGE` and `BELU ` score in evaluating text based models.
+
+    - **unigram vs bigram vs ngram**   
+        - `unigram: ` Equivalent to 1 word
+        - `bigram: ` Equivalent to 2 words
+        - `ngram: ` Equivalent to group of n-words
+
+            ```
+            Text: Large Language Models are awesome
+
+            1. unigrams: ['Large', 'Language', 'Models', 'are', 'awesome']
+
+            2. bigrams: ['Large Language', 'Language Models', 'Models are', 'are awesome']
+
+            3. trigrams: ['Large Language Models', 'Language Models are', 'Models are awesome']
+            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''            
+            ```
+        - `Why ngrams?`
+            - Consider chunk from the above text "Large Language Models"
+            - In unigram single word is considered (Large, Language, Models),
+            - In bigram pair of words are considered (Large Language, Language Models)
+            - In trigram three words are considered  (Large Language Models).
+            - So for the above chunk using trigram we are able to retain the true meaning. 
+            - However there may be scenario where chunk meaning can be retained by unigram (e.g. word apple), or bigram (e.g Rouge Score), or trigram (e.g. Large Language Models) and so on.
+            - This why we need to consider ngrams.  
+
+     - **ROUGE SCORE**  
+        - ROUGE stands for Recall-Oriented Understudy for Gisting Evaluation.
+        - Commonly used metrics for text summarization, but can also be used for machine translations task as well.
+        - `Idea:` To compare a model generated summary to one or more huma generated reference summaries.  
+        - I would like you to redirect to [this blog post](https://www.freecodecamp.org/news/what-is-rouge-and-how-it-works-for-evaluation-of-summaries-e059fb8ac840/) for detailed study.
+        - Based on unigrams, bigrams, trigrams, or ngrams, ROUGE score can be cateogrized into ROUGE-1, ROUGE-2, ROUGE-3, or ROUGE-N.
+        - We can understand ROUGE score interms of precision and recall, So if we consider unigram, then
+            - $ROUGE-1 (Precision) = \frac{UnigramMatches}{UnigramsInOutput}$
+
+            - $ROUGE-1 (Recall) = \frac{UnigramMatches}{UnigramsInReference}$
+
+        - For Bigram, 
+            - $ROUGE-2 (Precision) = \frac{BigramMatches}{BigramInOutput}$
+
+            - $ROUGE-1 (Recall) = \frac{BigramMatches}{BigramInReference}$
+        
+        - Similary, for ngram
+            - $ROUGE-n (Precision) = \frac{ngramMatches}{ngramInOutput}$
+
+            - $ROUGE-n (Recall) = \frac{ngramMatches}{ngramInReference}$
+        - If we get precision and recall, we can compute F1-score using harmonic mean of precision and recall.
+            $$F1(score) = \frac{2*Precision*Recall}{Precision+Recall}$$
+
+        - `ROUGE-L`
+            - It measures the longest common subsequences(LCS) between our system output and reference.
+            - Key idea is to count the longest sequence of tokens that is shared between the both. This is because, longer shared sequence would indicate more similarity between the two sequences.
+            - $ROUGE-L = \frac{LCS (R, S)}{UnigramsInReference}$
+                - Reference Text: It is cold outside
+                - System Text: It is very cold outside
+                - LCS: 2 (because It is, and cold outside is the longest sequence whose length is 2)
+
+        - **`Example:`**  
+                
+            ```
+            Reference (human):
+            It is cold outside.
+            unigrams: [It, is, cold, outside]
+            bigrams: [It is, is cold, cold outside]
+
+            System output:
+            It is very cold outside
+            unigrams: [It, is, very, cold, outside]
+            bigrams: [It is, is very, very cold, cold outside]
+
+            ROUGE-1 (Recall)    = unigram_matches / unigram_in_reference
+                                = 4 / 4 = 1
+            ROUGE-1 (Precision) = unigram_matches / unigram_in_system
+                                = 4 / 5 = 0.8
+            ROUGE-1 (F1)        = 2 * precision * recall / precision + recall
+                                = (2*0.8*1)/(0.8+1) = 0.89
+
+            
+            ROUGE-2 (Recall)    = bigram_matches / bigram_in_reference
+                                = 2 / 3 = 0.66
+            ROUGE-2 (Precision) = bigram_matches / bigram_in_system
+                                = 2/4 = 0.5
+            ROUGE-2 (F1)        = 2 * precision * recall / precision + recall
+                                = (2*0.5*0.66)/(0.5+0.66) = 0.568
+
+            **LONGEST COMMON SUBSEQUENCE**
+            ROUGE-L (recall)     =  LCS(S, R) / unigram_in_reference
+                                 = 2 / 4 = 0.5
+
+            ROUGE-L (precision)  =  LCS(S, R) / unigram_in_system
+                                 = 2 / 4 = 0.5
+            ```                 
+        - **`Cons:`**
+            - ROUGE Score may be high, even model generate same words repeatedly,
+                ```
+                Reference (Human):
+                It is cold outside
+
+                System output:
+                cold cold cold cold
+
+
+                ROUGE-1 (Precision)  =  unigram_matches/unigrams_output
+                                     = 4 / 4 
+                                     = 1
+
+
+                Solution --> Modified Precision
+                Modified Precision   = clip (unigram_matches) / unigrams_output
+                                     = 1 / 4 
+                                     = 0.25
+                ```
+        - For Python ROUGE Implementation: [click_here](https://pypi.org/project/rouge-score/)
+
+
+
+
+    - **BLEU SCORE**
+        - BLEU stands for `Bi-Lingual Evaluation Under Study`.
+        - Commonly used metrics for text translation task.
+        - `Idea:` To compare a model generated translation to one or more human generated reference translation.
+
+    
