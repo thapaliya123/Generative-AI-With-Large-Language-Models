@@ -174,7 +174,7 @@ _`How to evaluate how well our model performed?`_
 
             - $ROUGE-n (Recall) = \frac{ngramMatches}{ngramInReference}$
         - If we get precision and recall, we can compute F1-score using harmonic mean of precision and recall.
-            $$F1(score) = \frac{2*Precision*Recall}{Precision+Recall}$$
+            - $F1(score) = \frac{2*Precision*Recall}{Precision+Recall}$
 
         - `ROUGE-L`
             - It measures the longest common subsequences(LCS) between our system output and reference.
