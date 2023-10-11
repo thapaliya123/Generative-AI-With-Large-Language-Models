@@ -242,11 +242,12 @@ _`How to evaluate how well our model performed?`_
         - For Python ROUGE Implementation: [click_here](https://pypi.org/project/rouge-score/)
 
 
-
-
     - **BLEU SCORE**
         - BLEU stands for `Bi-Lingual Evaluation Under Study`.
         - Commonly used metrics for text translation task.
         - `Idea:` To compare a model generated translation to one or more human generated reference translation.
+        - BLEU metric = Avg(precision across range of n-gram sizes)
+        - BLEU Score by Andrew NG: [click_here](https://www.youtube.com/watch?v=DejHQYAGb7Q)
+        - For quick calculation of BLEU score, please vist [this blog](https://huggingface.co/spaces/evaluate-metric/bleu) post by HuggingFace
 
     
