@@ -252,4 +252,7 @@ _`How to evaluate how well our model performed?`_
 
     - Choice of evaluation metrics, always depends on the task that you are trying to solve. As discussed, for summarization task ROUGE score is used, for Machine Translation or Image Captioning task, BLEU score is used.
 
+
+## Benchmarks
+- There are many LLMs evolving on a daily basis, and the owner claim that this is the best LLMs till now. So, for this they are using commong Benchmarks dataset on which they assess the performance and compare it with other model performance.
     
