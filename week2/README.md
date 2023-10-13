@@ -254,5 +254,21 @@ _`How to evaluate how well our model performed?`_
 
 
 ## Benchmarks
-- There are many LLMs evolving on a daily basis, and the owner claim that this is the best LLMs till now. So, for this they are using commong Benchmarks dataset on which they assess the performance and compare it with other model performance.
-    
+- There are several LLMs that are evolving on a daily basis. So in order to compare the performance of these LLMs, we need some open source pre-existing datsets, which are called Benchmarks dataset. 
+- These pre-exsiting datasets are created via LLM researcher specifically for comparing  the performance of  several LLMs.
+- Different Bechmarks are:
+    - GLUE
+        - Stands for General Language Understanding Evaluation Benchmark
+        - It consists of datasets about whether the premise entails the hypothesis (entailment), contradics the hypothesis (contradiction), or neither (neutral) i.e. Natural Language Inference.
+        - HuggingFace data Link: [Click Here](https://huggingface.co/datasets/glue)
+    - SuperGLUE
+        - SuperGLUE is a new benchmark styled after GLUE.
+        - HuggingFace daa link: [click Here](https://huggingface.co/datasets/super_glue)
+    - HELM
+    - MMLU (Massive Multitask Language Understanding)
+        - It is multiple choice question test benchmark dataset.
+        - Covers 57 tasks including elementary mathematics, marketing, Public Relations, and more.
+        - As per paper, To attain high accuracy on this test, models must possess extensive world knowledge and problem solving ability.
+        - HuggingFace Data Link: [Click Here](https://huggingface.co/datasets/lukaemon/mmlu)
+        - Paper Link: [Click Here](https://arxiv.org/abs/2009.03300)
+    - BIG-bench
