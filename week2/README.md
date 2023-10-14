@@ -265,10 +265,14 @@ _`How to evaluate how well our model performed?`_
         - SuperGLUE is a new benchmark styled after GLUE.
         - HuggingFace daa link: [click Here](https://huggingface.co/datasets/super_glue)
     - HELM
+        - stands for Holistic Evaluation of Language Models (HELM)
+        - Recommended Read: [click_here](https://huggingface.co/blog/evaluating-mmlu-leaderboard)
     - MMLU (Massive Multitask Language Understanding)
         - It is multiple choice question test benchmark dataset.
         - Covers 57 tasks including elementary mathematics, marketing, Public Relations, and more.
+        - It is designed specifically for modern LLMs.
         - As per paper, To attain high accuracy on this test, models must possess extensive world knowledge and problem solving ability.
         - HuggingFace Data Link: [Click Here](https://huggingface.co/datasets/lukaemon/mmlu)
         - Paper Link: [Click Here](https://arxiv.org/abs/2009.03300)
     - BIG-bench
+        - You can visit [this github repo](https://github.com/google/BIG-bench/blob/main/bigbench/benchmark_tasks/README.md) for task name and description.
