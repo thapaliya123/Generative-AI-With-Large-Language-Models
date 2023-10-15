@@ -276,3 +276,56 @@ _`How to evaluate how well our model performed?`_
         - Paper Link: [Click Here](https://arxiv.org/abs/2009.03300)
     - BIG-bench
         - You can visit [this github repo](https://github.com/google/BIG-bench/blob/main/bigbench/benchmark_tasks/README.md) for task name and description.
+
+
+## Parameter Efficient Fine-Tuning (PEFT)
+
+- Training LLM is computationally inefficient
+- Full-fine tuning requires memory not only to store the models but there may be various other parameters required in training process like optimizer parameters, gradients etc
+- While training LLMs, You need to allocate memory for:
+    - Forward Activations
+    - Gradients
+    - Optimizer States
+    - Trainable weights
+    - Other temporary memory
+- In contrast to full-finetuning where every model weight is updated during supervised learning, parameter efficient fine-tuning method only update a small subset of parameters.
+- Idea is to freeze most of the model weights and focus on fine-tuning a subset of existing model parameters (e.g particular layers or components)
+- Another idea is to add new layer on top of pre-existing layers and only train the newly added layers.
+- In PEFT, most of the LLMs weights are kept frozen, this ways the trainable parameter while finetuning will be reduced compared to that of original LLMs.
+    - Generally, it consists of only 15-20% of original LLMs weights
+- PEFT can often be performed on a single GPU, and PEFT is less prone to catastrophic forgetting since only some layers are fine-tuned keeping weights of layers of original LLMs same.
+
+- Full Fine-tuning  creates full copy of original LLM per task, i.e.
+    - For Q&A fine-tune, we get Q&A LLM
+    - For summarization fine-tune, we get Summarization LLM
+    - For Generation fine-tune, we get Generation LLM
+
+- WIth PEFT,
+    - you train only a small subset of weights, and new weights are combined with the original LLM weights for inference
+
+- Instruction HIghlights the PEFT trade-offs i.e.
+    - Memory Efficiency
+    - Parameter Efficiency
+    - Training Speed
+    - Inference Costs
+    - Model Performance
+    - Memory Efficiency
+
+- 3 main PEFT Methods:
+    - `Selective Method`
+        - It fine-tune only a subset of original LLM parameters.
+        - There are several approaches in identifying which parameters you want to update.
+        - Here, you have the option to train only certain component of the model or specific layers, or even individual parameters types.
+    - `Reparameterization method`
+        - It also work with the original LLM parameters but reduce the numbre of parameters  to train by creating new low rank transformations of the original network weights.
+        - Commonly used techniques of these type is LORA.
+    - `Additive Method`
+        - It carry out fine-tuning keeping all of the LLM weights frozen and introducing new trainable components.
+        - Two main approaches,
+            - Adapter methods: adds new trainable layers to the architecture of the model, typically inside the encoder or decoder components after the attention or feed-forward layers.
+            - Soft prompts: keep the model architecture fixed and frozed.
+                - Focuses on manipulating the input to achieve better performance.
+                - Can be performed by adding trainable parameters to the prompt embeddings.
+        
+
+
