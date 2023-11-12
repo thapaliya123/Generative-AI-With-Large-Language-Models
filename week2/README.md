@@ -292,7 +292,7 @@ _`How to evaluate how well our model performed?`_
 - Idea is to freeze most of the model weights and focus on fine-tuning a subset of existing model parameters (e.g particular layers or components)
 - Another idea is to add new layer on top of pre-existing layers and only train the newly added layers.
 - In PEFT, most of the LLMs weights are kept frozen, this ways the trainable parameter while finetuning will be reduced compared to that of original LLMs.
-    - Generally, it consists of only 15-20% of original LLMs weights
+    - Generally, it consists of only 15-20% of original LLMs weights in order to train.
 - PEFT can often be performed on a single GPU, and PEFT is less prone to catastrophic forgetting since only some layers are fine-tuned keeping weights of layers of original LLMs same.
 
 - Full Fine-tuning  creates full copy of original LLM per task, i.e.
@@ -300,10 +300,32 @@ _`How to evaluate how well our model performed?`_
     - For summarization fine-tune, we get Summarization LLM
     - For Generation fine-tune, we get Generation LLM
 
-- WIth PEFT,
-    - you train only a small subset of weights, and new weights are combined with the original LLM weights for inference
+- With PEFT,
+    - you train only a small subset of weights, and new weights are combined with the original LLM weights for inference.
+    - In contrast to Full Fine-tuning, PEFT requires to train the model weights in the scale of MB's.
 
-- Instruction HIghlights the PEFT trade-offs i.e.
+- 3 main PEFT Methods:
+    - `Selective Method`
+        - It fine-tune only a subset of original LLM parameters.
+        - There are several approaches in identifying which parameters you want to update.
+        - Here, you have the option to train only certain component of the model or specific layers, or even individual parameters types.
+        - This method is not cover in this course.
+    - `Reparameterization method`
+        - It also work with the original LLM parameters but reduce the  number of parameters  to train by creating new low rank transformations of the original network weights.
+        - Commonly used techniques of these type is LORA.
+    - `Additive Method`
+        - It carry out fine-tuning keeping all of the LLM weights frozen and introducing new trainable components.
+        - Two main approaches,
+            - Adapter methods: 
+                - adds new trainable layers to the architecture of the model, typically inside the encoder or decoder components after the attention or feed-forward layers.
+            - Soft prompts: 
+                - keep the model architecture fixed and frozen.
+                - Focuses on manipulating the input to achieve better performance.
+                - Can be performed by adding trainable parameters to the prompt embeddings or retraining the embedding weights.
+                - This course covers specific soft prompts methods called `Prompt Tuning`.
+
+
+- Instruction HIghlights the following trade-offs when considering different PEFT methods   i.e.
     - Memory Efficiency
     - Parameter Efficiency
     - Training Speed
@@ -311,21 +333,23 @@ _`How to evaluate how well our model performed?`_
     - Model Performance
     - Memory Efficiency
 
-- 3 main PEFT Methods:
-    - `Selective Method`
-        - It fine-tune only a subset of original LLM parameters.
-        - There are several approaches in identifying which parameters you want to update.
-        - Here, you have the option to train only certain component of the model or specific layers, or even individual parameters types.
-    - `Reparameterization method`
-        - It also work with the original LLM parameters but reduce the numbre of parameters  to train by creating new low rank transformations of the original network weights.
-        - Commonly used techniques of these type is LORA.
-    - `Additive Method`
-        - It carry out fine-tuning keeping all of the LLM weights frozen and introducing new trainable components.
-        - Two main approaches,
-            - Adapter methods: adds new trainable layers to the architecture of the model, typically inside the encoder or decoder components after the attention or feed-forward layers.
-            - Soft prompts: keep the model architecture fixed and frozed.
-                - Focuses on manipulating the input to achieve better performance.
-                - Can be performed by adding trainable parameters to the prompt embeddings.
+
+- `Key Takeaway:`
+    - Performing full-finetuning can lead to catastrophic forgetting because it changes all parameters on the model. Since PEFT only updates a small subset of parameters, it's more robust against the catastrophic forgetting effect.
+
         
 
+## PEFT Techniques (LORA)
+- stands for Low Rank Adaptation
+- parameter efficient fine-tuning technique that falls into the re-parameterization category.
+- Instructor gave high level overview of transformer architecture as a revision.
+- During full-fine tuning every parameters in the network is updated whereas LORA is a strategy that reduces the number of parameters to be trained during fine-tuning by freezing all of the original model parameters and then injecting a pair of rank decomposition matrices alongside the original weights
+- Now we train the weights of smaller matrices
+
+- Steps:
+    - Freeze most of the original LLM weights.
+    - Inject 2 rank decomposition matrices.
+    - Train the weighs of the smaller matrices using the same supervised learning technique
+    
+- Researchers suggest to apply LORA i.e. decomposition matrices in self-attention layers.
 
