@@ -334,9 +334,12 @@ _`How to evaluate how well our model performed?`_
     - Memory Efficiency
 
 
-- `Key Takeaway:`
+- `PEFT Summary:`
     - Performing full-finetuning can lead to catastrophic forgetting because it changes all parameters on the model. Since PEFT only updates a small subset of parameters, it's more robust against the catastrophic forgetting effect.
-
+    - PEFT methods attempt to address some of the challenges of performing full fine-tuning process:
+        - Because most parameters are frozen, we typically only need to train 15%-20% of the original LLM weights, making the training process less expensive (less memory required)
+        - With PEFT, most parameters of the LLM are unchanged, and that helps making it less prone to catastrophic forgetting.
+        - With PEFT, we can change just a small amount of parameters when fine-tuning, so during inference you can combine the original model with the new parameters, instead of duplicating the entire model for each new task you want to perform fine-tuning.
         
 
 ## PEFT Techniques (LORA)
@@ -346,10 +349,120 @@ _`How to evaluate how well our model performed?`_
 - During full-fine tuning every parameters in the network is updated whereas LORA is a strategy that reduces the number of parameters to be trained during fine-tuning by freezing all of the original model parameters and then injecting a pair of rank decomposition matrices alongside the original weights
 - Now we train the weights of smaller matrices
 
-- Steps:
+- High Level Steps:
     - Freeze most of the original LLM weights.
     - Inject 2 rank decomposition matrices.
     - Train the weighs of the smaller matrices using the same supervised learning technique
-    
-- Researchers suggest to apply LORA i.e. decomposition matrices in self-attention layers.
 
+- Steps to update model for inference
+    1. For inference two Low Rank matrices are multiplied together to create a matrix with the same dimensions as the frozen weights.
+        - B * A = B x A
+    2. Next step is to add this weights to the original weights and replace them in the model with these updated weight values.
+    3. You now have the LORA fine-tuned model that can carry out your specific tasks. Because these models has the same number of parameters as the original there is little to no impact on the inference latency. 
+
+- Researchers has found that to apply the LORA just before the self-attention layers of the model is often enough to fine-tune a task in the cheap performance gain. Researchers suggest to apply LORA i.e. decomposition matrices in self-attention layers.
+
+- However you can also apply the LORA in other model architectures as well. However most of the LLMs are parameters are in the attention layers, you get the biggest savings in trainable parameters by applying LORA to these weights matrices
+
+
+- **Example: (Using Transformer Architecture)**
+    - As per the transformer paper, Transformer weights have dimensions of `d x k = 512 x 64`.
+        - where, d = maximum number of tokens, k = embedding vector.
+    - So each weight matrices has 512 x 64 = 32,768 trainable parameters.
+    - So, In LORA with rank r = 8:
+        - we will instead train two small rank decomposition matrices whose small dimension is 8. 
+            - This means, 
+                - matrix A has dimensions of r x k = 8 x 64 = 512 parameters.
+                - matrix B has dimension of d x r = 512 x 8 = 4096 trainable parameters.
+        - So by updating the weights of this new low rank matrices instead of original model weights, you will be training 4608 parameters instead of 32,768 parameters, This is around 86% reduction in parameters to train.
+
+- Since LORA helps to reduce the trainable parameters drastically, it allows us to fine-tune the model using single GPU instead of clusters of GPU's.
+- You can train different rank decomposition matrices for different tasks and update weights before inference.
+    - Suppose you train a pair of LORA matrices for a specific tasks, say Task A.
+    - To carry out inference on this task, say Task A, 
+        - You multiply these matrices together and then add the resulting matrix to the original frozen weights.
+        - You then take this summed weights (frozen weights + LORA weights) and replace it with the original model weights to carry out the inference on this task A. 
+
+    - Assume, you want to perform inference on different task, say Task B.
+        - you simply take the LORA matrices calculated for this task.
+        - calculate their product and then add then add the original weights, Finally update the model again.
+        - The memory required to update these LORA matrices are very small.
+
+    
+- Instructor discussed about difference between full-finetuning vs LORA fine-tuning, and performed the comparison using ROUGE metrics for Dialog Summarization (FLAN-T5).
+
+```
+Task: Dialog Summarization
+Model: FLAN-T5
+
+1. Base Model
+ROUGE1 --> 0.2334
+ROUGE2 --> 0.0760
+ROUGEL --> 0.2014
+
+2. Full Fine-Tune (Instruction based)
+ROUGE1 --> 0.4216
+ROUGE2 --> 0.1804
+ROUGEL --> 0.3384
+
+3. LORA fine-tune 
+ROUGE1 --> 0.4081
+ROUGE2 --> 0.1633
+ROUGEL --> 0.3251
+
+Note:
+- LORA achieves performance improvement over the base model but not greater than the Full Fine Tuned model.
+- However Full Fine Tuning has a larger number of trainable parameters as compared to LORA, and this means we need large computing power when using Full Fine Tuning as compared to LORA.
+```
+
+- Choosing good rank of matrices when using LORA is the active area of research. 
+    - `smaller the rank, smaller will be the trainable parameters`.
+
+- [LORA](https://arxiv.org/abs/2106.09685) paper highlighted the impact of model performance on language generation task with the choice of different rank as shown below:
+
+- <img src='images/4.png' width='400'>  
+
+    - Increasing the Rank, authors founds the plateau.
+    - This means using larger LORA matrices didn't improve the performance of the model.
+    - Instructor mentioned rank betwen 4 to 32 could be the good choice.
+
+
+## PEFT Techniques (Soft Prompts)
+- We will look into specific soft prompts techniques called Prompt Tuning.
+- Prompt Tuning is not Prompt Engineering, although they sound quite similar.
+    - In `prompt engineering` you work on the language of your prompt to get the desired completion. Example: playing with different words, special tokens used in model to make model understand your input prompt, trying one-shot or few-shot inference and so on.
+     - In `prompt tuning`
+
+
+
+
+## Key Takeaways
+- We discussed on:
+    - how to adapt a foundation model through a process called instruction fine-tuning.
+- We looked into some of the prompt templates and data sets that were used to train the FLAN-T5 model. 
+- We discussed on different evaluation metrics like BLEU score and ROUGE score and different Benchmarks like HELM, GLUE, etc.
+- We discussed on comparison between no fine-tuning vs full fine-tuning vs PEFT, and came to conclusion that using PEFT model performance is quite similar to that of full fine-tuning wit.
+- With just a few hundred of examples you can fine-tune a model to your specific tasks.
+- We also discussed how PEFT reduces the model parameters while performing fine-tuning.
+- We discussed to techniques for PEFT i.e. LORA, and Prompt Tuning.
+- when you combine LORA with the Quantization techniques to further reduce the memory footprint, This is known as Q-LORA.
+- In practice PEFT is used heavily to minimize compute and memory requirements.
+
+
+
+## Lab Summary
+- In this week's lab instructors deep dive into full fine-tuning and parameter efficient fine tuning (PEFT) with prompt instructions.
+- Model used: FLAN-T5
+- Task: Text Summarization
+- Dataset: [HuggingFace DailogSum](https://huggingface.co/datasets/knkarthick/dialogsum)
+- Evaluation Metric: ROUGE SCORE
+- Libraries:
+    - torch
+    - transformers
+        - AutoModelForSeq2Seq, AutoTokenizer
+    - datasets
+    - rouge_score
+    - loralib
+    - peft
+    - numpy
+    - pandas
