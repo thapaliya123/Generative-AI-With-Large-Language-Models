@@ -451,18 +451,110 @@ Note:
 
 
 ## Lab Summary
-- In this week's lab instructors deep dive into full fine-tuning and parameter efficient fine tuning (PEFT) with prompt instructions.
-- Model used: FLAN-T5
-- Task: Text Summarization
-- Dataset: [HuggingFace DailogSum](https://huggingface.co/datasets/knkarthick/dialogsum)
-- Evaluation Metric: ROUGE SCORE
-- Libraries:
-    - torch
-    - transformers
-        - AutoModelForSeq2Seq, AutoTokenizer
-    - datasets
-    - rouge_score
-    - loralib
-    - peft
-    - numpy
-    - pandas
+>> In this week's lab, instructors delved into the intricacies of full fine-tuning and parameter-efficient fine-tuning (PEFT) with prompt instructions, utilizing the powerful FLAN-T5-base model for text summarization. The chosen task focused on summarizing dialogues from the HuggingFace DailogSum dataset, comprising over 10,000 dialogues with manually labeled summaries and topics.
+
+- **Model and Task**
+    - Model used: [FLAN-T5-base](https://huggingface.co/google/flan-t5-base)
+    - `Task:` Text Summarization
+    - `Dataset:` [HuggingFace DailogSum](https://huggingface.co/datasets/knkarthick/dialogsum)
+        - contains 10,000+ dialogues with the corresponding manually labeled summaries and topics.
+    - `Evaluation Metric:` ROUGE SCORE
+    - `EC2 instance type:` ml.m5.2xlarge --> 8 vCPU + 32GiB
+    - `Libraries:` torch, transformers (AutoModelForSeq2Seq, AutoTokenizer, GenerationConfig, TrainingArguments, [Trainer](https://huggingface.co/docs/transformers/main_classes/trainer)), datasets, rouge_score, loralib, peft, numpy, pandas
+
+- **Full Fine-Tuning Steps**
+    1. `Prompt Construction`
+        - Added start and end prompts to dialogues for summarization.
+        - `start_prompt` = "Summarize the following conversation.\n\n"
+        - `end_prompt` = "\n\nSummary: "
+        - Combined prompts: `start_prompt` + `dialogue` + `end_prompt`
+    2. `Data Preparation`
+        - Tokenized the input prompts and summary labels using HuggingFace Tokenizers.
+        - Sample Dataset shapes: Training (125, 2), Validation (5, 2), Test (15, 2).
+    3. `Fine-Tuning`
+        - Utilized the Training Arguments and Trainer Library from transformers.
+        - Fine-tuned with the training split, validated with validation split, and tested with the test split.
+        - Training Configuration:
+            - learning_rate = 1e-5
+            - num_train_epochs = 1
+            - weight_decay = 0.01
+            - logging_steps = 1
+            - max_steps = 1
+    4. `Model Size and Evaluation`
+        - Fully fine-tuned model size: 1GB
+        - Evaluation involved both qualitative (human eye) and quantitative (ROUGE Score) assessments.
+        - Showed that the fully fine-tuned model outperforms the original model based on the ROUGE metric.
+ 
+ - **Parameter Efficient Fine-Tuning (PEFT)**
+    1. `PEFT OVerview`
+        - Designed to lower memory, CPU, GPU usage.
+        - Total model parameters: 251116800
+        - Trainable model parameters: 3538944
+        - Percentage of trainable parameters for PEFT: 1.41%.
+
+    2. `LORA Configuration`
+        - LORA Rank: 32
+    
+    3. `Model Size and Inference`
+        - PEFT Model size: 14MB
+        - During inference, the PEFT model is merged with the original LLM model.
+
+- **Qualitative Evaluation (Human Eye)**
+```
+---------------------------------------------------------------------------------------------------
+BASELINE HUMAN SUMMARY:
+#Person1# teaches #Person2# how to upgrade software and hardware in #Person2#'s system.
+---------------------------------------------------------------------------------------------------
+ORIGINAL MODEL:
+#Pork1: Have you considered upgrading your system? #Person1: Yes, but I'd like to make some improvements. #Pork1: I'd like to make a painting program. #Person1: I'd like to make a flyer. #Pork2: I'd like to make banners. #Person1: I'd like to make a computer graphics program. #Person2: I'd like to make a computer graphics program. #Person1: I'd like to make a computer graphics program. #Person2: Is there anything else you'd like to do? #Person1: I'd like to make a computer graphics program. #Person2: Is there anything else you need? #Person1: I'd like to make a computer graphics program. #Person2: I'
+---------------------------------------------------------------------------------------------------
+FULL FINE TUNED INSTRUCT MODEL:
+#Person1# suggests #Person2# upgrading #Person2#'s system, hardware, and CD-ROM drive. #Person2# thinks it's great.
+---------------------------------------------------------------------------------------------------
+PEFT INSTRUCT MODEL: 
+#Person1# recommends adding a painting program to #Person2#'s software and upgrading hardware. #Person2# also wants to upgrade the hardware because it's outdated now.
+```
+
+- **Quantitative Evaluation (ROUGE Score)**
+```
+ORIGINAL MODEL:
+{'rouge1': 0.2127769756385947, 'rouge2': 0.07849999999999999, 'rougeL': 0.1803101433337705, 'rougeLsum': 0.1872151390166362}
+---------------------------------------------------------------------------------------------------
+Full Fine Tuned INSTRUCT MODEL:
+{'rouge1': 0.41026607717457186, 'rouge2': 0.17840645241958838, 'rougeL': 0.2977022096267017, 'rougeLsum': 0.2987374187518165}
+---------------------------------------------------------------------------------------------------
+PEFT INSTRUCT MODEL:
+{'rouge1': 0.3725351062275605, 'rouge2': 0.12138811933618107, 'rougeL': 0.27620639623170606, 'rougeLsum': 0.2758134870822362}
+```
+
+## Additional Readings:
+>> Includes additional resources suggested by instructor.
+
+1. **Multi-task Instruction Fine-tuning**
+    - [Scaling Instruction Finetuned Language Model](https://arxiv.org/pdf/2210.11416.pdf)
+    - [Introducing FLAN: More generalize language models with instruction Fine-Tuning](https://blog.research.google/2021/10/introducing-flan-more-generalizable.html)
+
+
+2. **Model Evaluation Metrics**
+    - [HELM - Holistic Evaluation of Language Models](https://crfm.stanford.edu/helm/latest/)
+    - [General Language Understanding Evaluation (GLUE) benchmark](https://openreview.net/pdf?id=rJ4km2R5t7)
+    - [SuperGLUE](https://super.gluebenchmark.com/)
+    - [ROUGE: A package for Automatic Evaluation of Summaries](https://aclanthology.org/W04-1013.pdf)
+    - [Measuring Massive Multitask Language Understanding (MMLU)](https://arxiv.org/pdf/2009.03300.pdf)
+    - [BigBench-Hard-Beyond the limitation Game: Quantifying and Extrapolating the Capabilities of Language Model](https://arxiv.org/pdf/2206.04615.pdf)
+
+
+3. **Parameter-efficient fine tuning (PEFT)**
+    - [Scaling Down to Scale Up: A Guide to Parameter-Efficient Fine-Tuning](https://arxiv.org/pdf/2303.15647.pdf)
+    - [On the Effectiveness of Parameter-Efficient Fine-Tuning](https://arxiv.org/pdf/2211.15583.pdf)
+
+
+4. **LoRA**
+    - [LoRA Low-Rank Adaptation of Large Language Models](https://arxiv.org/pdf/2106.09685.pdf)
+    - [QLoRA: Efficient Finetuning of Quantized LLMs](https://arxiv.org/pdf/2305.14314.pdf)
+
+
+5. **Prompt tuning with soft prompts**
+    - [The Power of Scale for Parameter-Efficient Prompt Tuning](https://arxiv.org/pdf/2104.08691.pdf)
+
+
