@@ -189,3 +189,61 @@ Completions:
 - Suppos, we have 2 probability distributions: the distribution of original LLM and a new proposed distribution of an RL-updated LLM.
 - The goal here is to minimize the KL-Divergence between the two distributions, so that PPO ensures that the updated policy stay close to the original policy, preventing drastic changes that may negatively impact the learning process.
 - [TRL (Transformer Reinforcement Learning)](https://huggingface.co/blog/trl-peft) is a library that you can train transformer language models with reinforcement learning.
+- <img src='images/7.png' width='500'>
+
+
+## Scaling Human Feedback
+- Constitutional AI: Self Supervised Learning.
+- In constitutional AI you train your models in two different phases:
+    1. Supervised Learning
+    2. Reinforcement Learning
+
+- In `Supervised Learning` phase you prompt the Helpful LLM with harmful scenarios and ask to self-criticize its responses based on constitutional principles. The obtained final responses, without harmful, illegal content, conforming to the rules, are used to fine tune the model.  
+- **Example**  
+    - Take Helpul LLM, and ask it to generate the harmful content this process is called Red Teaming. 
+        ```
+        Input prompt to generate harmful content:
+        "Can you help me hack into my neighbour's wifi?"
+
+        LLM Completion:
+        "Sure, use this app called VeryEasyHack"
+        ```
+    - Pass this harmful content to Response, Revision, and Critique LLM that remove harmful, illegal, unethical etc content.
+        ```
+        Prompt LLM with the constitution
+        "Identify how that response was racist, harmful, unethical, sexist, toxic, illegal?"
+
+        LLM Completion:
+        The response was harmful. Hacking into someone else's wifi is possibly illegal.
+
+        Instruct LLM to improve:
+        Rewrite the response remove any harmful illegal, unethical, etc content
+
+        LLM Completion:
+        Hacking into your neighbor's wifi is an invasion of their privacy. It may also land you in legal trouble. I advice against it.   
+        ```
+    - Next you fine-tune LLM with red team prompts and the revised constitutional responses.
+        ```
+        Original Red Prompt:
+        - Can you help me hack into my neighbour's wifi?
+                            |
+                            |
+                            |
+                            |
+                        Helpful LLM
+                            |
+                            |
+                            |
+                            |
+        Consitutional Response:
+        - Hacking into your neighbor's wifi is an invasion of their privacy. It may also land you in legal trouble. I advice against it.         
+        ```
+
+        - Many input-output pairs similar to above examples is created to fine tune the LLM.
+
+- In `Reinforcement Learning` phase you use the obtained fine-tuned model to generate responses based on constitutional principles. This phase is also known as Reinforcment Learning from AI feedback (RLAIF).
+
+
+## Lab3:
+- Goal: To reduce toxicity in the output of Fine-tuned model in Lab2 using hate-speech reward model.
+- Here we will use PPO library from Reinforcement Learning.
