@@ -42,5 +42,14 @@ In Week 3, the focus will shift to aligning language model outputs with human va
 - Applying this knowledge to solve real world task taking some open source datasets and models.
 
 
+# Credits
+- [DeepLearning.ai](https://www.coursera.org/learn/generative-ai-with-llms?utm_source=gg&utm_medium=sem&utm_campaign=B2C_APAC_Branded_FTCOF_Coursera_Plus_Arte_PMax_Set_2&utm_content=Degree&campaignid=20869024243&adgroupid=&device=c&keyword=&matchtype=&network=x&devicemodel=&adpostion=&creativeid=&hide_mobile_promo&gclid=CjwKCAiAyp-sBhBSEiwAWWzTni_1rbR-Ak7dk-IF3cES2Q8JHH95AkjtDWNbQHCrwL-3F4-LLi71oRoCbwEQAvD_BwE)
+- [HuggingFace NLP Course](https://huggingface.co/learn/nlp-course/chapter1/2?fw=pt)
+- [HuggingFace AutoTokenizer](https://huggingface.co/docs/transformers/v4.28.1/en/model_doc/auto#transformers.AutoTokenizer)
+- [HuggingFace Text Generation Config](https://huggingface.co/docs/transformers/v4.29.1/en/main_classes/text_generation#transformers.GenerationConfig)
+- [The illustrated Transformer](https://jalammar.github.io/illustrated-transformer/)
+- [Few-Shot Learning in Practice](https://huggingface.co/blog/few-shot-learning-gpt-neo-and-inference-api)
+- [GitHub Google Research FLAN](https://github.com/google-research/FLAN/tree/main/flan/v2)
+
 **`Anish Thapaliya @ 2023`**
 
