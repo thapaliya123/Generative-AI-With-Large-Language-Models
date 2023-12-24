@@ -1,9 +1,18 @@
 # Generative AI with Large Language Models
->>  If you're interested in advancing your knowledge and skills in Natural Language Processing (NLP) and working with cutting-edge Large Language Models (LLMs), this course is perfect for you! Throughout this comprehensive journey, you'll explore the transformative power of language models and learn how to harness their potential for real-world applications. Here's a summary of what you can expect from this exciting course:
+>>  This repository contains my personal notes and summaries on [Generative AI with LLMs by Deep Learning.ai](https://www.coursera.org/learn/generative-ai-with-llms)
 
-### Course Overview
+>> If you're interested in advancing your knowledge and skills in Natural Language Processing (NLP) and working with cutting-edge Large Language Models (LLMs), this course is perfect for you! Throughout this comprehensive journey, you'll explore the transformative power of language models and learn how to harness their potential for real-world applications. 
 
-Generative AI with Large Language Models (LLMs) course is designed to equip you with the essential concepts and practical techniques needed to work effectively with large language models. You'll start with a solid introduction to transformers, the architecture behind these powerful models. As you progress, you'll dive into the training process and gain insights into the extensive compute resources required to develop LLMs.
+# Course Certificate
+I've successfully completed the course and earned my [certificate](https://coursera.org/share/53871f257db305ee64a7e3bbdade5577)!
+
+<img src="./Certificate/llm_certificate.png" width="700">
+
+-
+
+# Course Overview
+
+[DeepLearning.ai --> Generative AI with Large Language Models](https://www.coursera.org/learn/generative-ai-with-llms) course is designed to equip you with the essential concepts and practical techniques needed to work effectively with large language models. You'll start with a solid introduction to transformers, the architecture behind these powerful models. As you progress, you'll dive into the training process and gain insights into the extensive compute resources required to develop LLMs.
  
  ### Prerequisites
 
@@ -28,4 +37,10 @@ In Week 3, the focus will shift to aligning language model outputs with human va
 **Hands-on Lab:** The practical session for Week 3 will involve implementing Reinforcement Learning from Human Feedback (RLHF). You'll work on building a reward model classifier to align language model outputs with human values.
 
 
+# Next Steps
+- Taking [DeepLearning.ai](https://www.deeplearning.ai/short-courses/) as it focuses more on individual components discussed in this course. 
+- Applying this knowledge to solve real world task taking some open source dataset and models.
+
+
+**`Anish Thapaliya @ 2023`**
 

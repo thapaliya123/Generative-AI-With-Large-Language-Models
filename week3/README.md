@@ -192,7 +192,9 @@ Completions:
 - <img src='images/7.png' width='500'>
 
 
-## Scaling Human Feedback
+## Scaling Human Feedback (Constitutional AI)
+> According to [constitutional.ai](https://www.constitutional.ai/), Constitutional AI refers to a set of techniques developed by researches at anthropic to align AI systems with human values and make us helpful, harmless, and honest.
+
 - Constitutional AI: Self Supervised Learning.
 - In constitutional AI you train your models in two different phases:
     1. Supervised Learning
@@ -244,6 +246,20 @@ Completions:
 - In `Reinforcement Learning` phase you use the obtained fine-tuned model to generate responses based on constitutional principles. This phase is also known as Reinforcment Learning from AI feedback (RLAIF).
 
 
-## Lab3:
+## Lab3 (Summary):
 - Goal: To reduce toxicity in the output of Fine-tuned model in Lab2 using hate-speech reward model.
 - Here we will use PPO library from Reinforcement Learning.
+- Here we will be optimizing for not hate.
+- Evaluation:
+    - Quantitative Comparisons
+    - Qualitative Comparisons
+- AutoModelForSequenceClassification
+    - Facebook Classification Model
+    - Given a text it will whether the text contains hate speech or not hate speech
+- `trl.core.LengthSampler:` 
+    - uses this library to sample text of variables length.
+- Datasets: DialogSum
+- Models: pretrianed FLAN-T5, Fine-Tuned FLAN-T5.
+- Reward Model: Pretrained roberta-hate-speech model from facebook.
+    - model_name: facebook/roberta-hate-speech-dynabench-r4-target.
+    - reward is the logits value of the not-hate class.
