@@ -38,8 +38,8 @@ In Week 3, the focus will shift to aligning language model outputs with human va
 
 
 # Next Steps
-- Taking [DeepLearning.ai](https://www.deeplearning.ai/short-courses/) as it focuses more on individual components discussed in this course. 
-- Applying this knowledge to solve real world task taking some open source dataset and models.
+- Taking [DeepLearning.ai Short courses](https://www.deeplearning.ai/short-courses/) as it focuses more on individual topics on Large Language Models discussed in this course. 
+- Applying this knowledge to solve real world task taking some open source datasets and models.
 
 
 **`Anish Thapaliya @ 2023`**
